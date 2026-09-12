@@ -8,13 +8,14 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     curl \
     wget \
+    zstd \
     libsqlite3-dev \
     && docker-php-ext-install pdo pdo_sqlite \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
-    
+
 # Install Python AI packages
 RUN pip3 install --no-cache-dir --break-system-packages \
     -r /var/www/html/requirements.txt
