@@ -15,10 +15,11 @@ if ($text === '') {
 }
 
 // Python executable
-$python = 'python';
+$python = getenv('PYTHON_BIN') ?: 'python';
+
 
 // Piper voice model
-$model = 'C:/piper/voices/en_US-lessac-medium.onnx';
+$model = getenv('PIPER_MODEL') ?: '';
 
 if ($model === '') {
     http_response_code(503);

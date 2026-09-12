@@ -1,0 +1,10 @@
+.git
+.env
+uploads/interviews/*
+uploads/processing/*
+uploads/tts/*
+*.mp4
+*.webm
+*.wav
+__pycache__
+*.pyc
