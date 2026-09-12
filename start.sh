@@ -9,19 +9,26 @@ mkdir -p /var/www/html/uploads/tts
 mkdir -p /var/www/html/uploads/processing
 mkdir -p /var/www/html/uploads/interviews
 
-# Set permissions
 chown -R www-data:www-data /var/www/html/uploads
 chmod -R 775 /var/www/html/uploads
 
-# Render provides the PORT environment variable
+# Start Ollama in background
+echo "Starting Ollama..."
+ollama serve > /tmp/ollama.log 2>&1 &
+
+# Wait for Ollama to start
+sleep 5
+
+# Download the AI model
+echo "Checking Ollama model..."
+ollama pull llama3.2:3b
+
+# Render port
 PORT=${PORT:-10000}
 
 echo "Starting Apache on port $PORT"
 
-# Configure Apache to listen on Render's port
 sed -i "s/Listen 80/Listen $PORT/" /etc/apache2/ports.conf
-
 sed -i "s/<VirtualHost \*:80>/<VirtualHost *:$PORT>/" /etc/apache2/sites-enabled/000-default.conf
 
-# Start Apache
 apache2-foreground
