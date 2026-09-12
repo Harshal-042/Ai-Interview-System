@@ -16,19 +16,19 @@ RUN apt-get update && apt-get install -y \
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | sh
 
-# Install Python AI packages
-RUN pip3 install --no-cache-dir --break-system-packages \
-    -r /var/www/html/requirements.txt
-
-# Enable Apache rewrite module
+# Enable Apache rewrite
 RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-# Copy project files
+# Copy project files FIRST
 COPY . /var/www/html/
 
-# Create required upload folders
+# Install Python AI packages AFTER requirements.txt is copied
+RUN pip3 install --no-cache-dir --break-system-packages \
+    -r /var/www/html/requirements.txt
+
+# Create required folders
 RUN mkdir -p \
     /var/www/html/uploads/tts \
     /var/www/html/uploads/processing \
@@ -42,15 +42,13 @@ RUN wget -q -O /opt/piper/voices/en_US-lessac-medium.onnx \
 RUN wget -q -O /opt/piper/voices/en_US-lessac-medium.onnx.json \
     https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
 
-# Permissions
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html/uploads && \
     chmod -R 775 /var/www/html/uploads
 
-# Copy startup script
-COPY start.sh /start.sh
-
-RUN chmod +x /start.sh
+# Make startup script executable
+RUN chmod +x /var/www/html/start.sh
 
 EXPOSE 10000
 
-CMD ["/start.sh"]
+CMD ["/var/www/html/start.sh"]
