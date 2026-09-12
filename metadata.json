@@ -1,0 +1,6 @@
+{
+  "name": "AI Interview System",
+  "description": "Continuous recording AI-powered interview platform with voice question delivery, audio processing, local AI evaluation, and PHP integration.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
